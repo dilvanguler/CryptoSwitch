@@ -7,10 +7,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dilvan.cryptoswitch.endpoint.ApiClient
 import com.dilvan.cryptoswitch.endpoint.Crypto
+import com.dilvan.cryptoswitch.endpoint.CryptoViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +22,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     private lateinit var adapter: CryptoAdapter
     private var cryptocurrencies: List<Crypto> = listOf()
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter = CryptoAdapter()
         val recyclerView = findViewById<RecyclerView>(R.id.idCurrencies)
+        progressBar = findViewById(R.id.idLoading)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -41,30 +47,23 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        fetchCryptoData()
-    }
+        val viewModel = ViewModelProvider(this).get(CryptoViewModel::class.java)
+        viewModel.fetchCryptoData()
 
-    private fun fetchCryptoData() {
-        val progressBar = findViewById<ProgressBar>(R.id.idLoading)
-        progressBar.visibility = View.VISIBLE
+        viewModel.cryptoData.observe(this, Observer { cryptoList ->
+            // Update your RecyclerView with the new data
+            adapter.setData(cryptoList)
+        })
 
-        val call = ApiClient.cryptoService.getCryptocurrencies()
-        call.enqueue(object : Callback<List<Crypto>> {
-            override fun onResponse(call: Call<List<Crypto>>, response: Response<List<Crypto>>) {
-                progressBar.visibility = View.GONE
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+            // Show or hide your ProgressBar based on the value of isLoading
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        })
 
-                if (response.isSuccessful) {
-                    cryptocurrencies = response.body() ?: listOf()
-                    adapter.setData(cryptocurrencies)
-                } else {
-                    // Handle the error
-                }
-            }
-
-            override fun onFailure(call: Call<List<Crypto>>, t: Throwable) {
-                progressBar.visibility = View.GONE
-                // Handle the failure
-            }
+        viewModel.error.observe(this, Observer { error ->
+            // Show the error message
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         })
     }
+
 }
