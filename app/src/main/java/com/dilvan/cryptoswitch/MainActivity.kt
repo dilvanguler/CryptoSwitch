@@ -13,8 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dilvan.cryptoswitch.endpoint.Crypto
-import com.dilvan.cryptoswitch.endpoint.CryptoViewModel
+import com.dilvan.cryptoswitch.adapter.CryptoAdapter
+import com.dilvan.cryptoswitch.data.Crypto
+import com.dilvan.cryptoswitch.viewmodel.CryptoViewModel
 
 
 class MainActivity : AppCompatActivity() {

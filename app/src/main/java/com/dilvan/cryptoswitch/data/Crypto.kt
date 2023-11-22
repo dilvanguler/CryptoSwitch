@@ -1,4 +1,4 @@
-package com.dilvan.cryptoswitch.endpoint
+package com.dilvan.cryptoswitch.data
 
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable

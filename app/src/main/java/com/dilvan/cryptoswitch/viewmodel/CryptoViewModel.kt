@@ -1,7 +1,9 @@
-package com.dilvan.cryptoswitch.endpoint
+package com.dilvan.cryptoswitch.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dilvan.cryptoswitch.data.Crypto
+import com.dilvan.cryptoswitch.endpoint.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

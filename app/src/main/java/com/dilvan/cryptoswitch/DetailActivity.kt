@@ -11,7 +11,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.dilvan.cryptoswitch.endpoint.ApiClient
-import com.dilvan.cryptoswitch.endpoint.Crypto
+import com.dilvan.cryptoswitch.data.Crypto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,6 +1,7 @@
 package com.dilvan.cryptoswitch.endpoint
 
 import ExchangeRateResponse
+import com.dilvan.cryptoswitch.data.Crypto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

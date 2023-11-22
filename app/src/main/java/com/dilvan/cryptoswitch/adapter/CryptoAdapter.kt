@@ -1,11 +1,12 @@
-package com.dilvan.cryptoswitch
+package com.dilvan.cryptoswitch.adapter
 
-import com.dilvan.cryptoswitch.endpoint.Crypto
+import com.dilvan.cryptoswitch.data.Crypto
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.dilvan.cryptoswitch.R
 
 class CryptoAdapter(private val onCryptoClick: (Crypto) -> Unit) :
     RecyclerView.Adapter<CryptoAdapter.CryptoViewHolder>() {
