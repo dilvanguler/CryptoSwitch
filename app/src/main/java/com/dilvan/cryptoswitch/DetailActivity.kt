@@ -39,13 +39,17 @@ class DetailActivity : AppCompatActivity() {
         val quoteAsset = crypto?.quoteAsset
 
         val nameTextView = findViewById<TextView>(R.id.tvdBaseAsset)
-        nameTextView.text = cryptoName
+        if (cryptoName != null) {
+            nameTextView.text = cryptoName.toUpperCase()
+        }
 
         val priceTextView = findViewById<TextView>(R.id.tvdPrice)
         priceTextView.text = "Price: $price"
 
         val quoteAssetTextView = findViewById<TextView>(R.id.tvdQuoteAsset)
-        quoteAssetTextView.text = "Currency:  $quoteAsset"
+        if (quoteAsset != null) {
+            quoteAssetTextView.text = "Currency:  ${quoteAsset.toUpperCase()}"
+        }
 
         // Fetching the exchange rates
         fetchExchangeRates(spinner, currencies, priceTextView, intent, rates)

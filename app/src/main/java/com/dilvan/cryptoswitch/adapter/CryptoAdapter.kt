@@ -36,8 +36,8 @@ class CryptoAdapter(private val onCryptoClick: (Crypto) -> Unit) :
 
     class CryptoViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(crypto: Crypto) {
-            view.findViewById<TextView>(R.id.tvBaseAsset).text = crypto.baseAsset
-            view.findViewById<TextView>(R.id.tvQuoteAsset).text = crypto.quoteAsset
+            view.findViewById<TextView>(R.id.tvBaseAsset).text = crypto.baseAsset.toUpperCase()
+            view.findViewById<TextView>(R.id.tvQuoteAsset).text = crypto.quoteAsset.toUpperCase()
 
         }
     }
