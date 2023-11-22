@@ -1,5 +1,6 @@
 package com.dilvan.cryptoswitch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -25,11 +26,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = CryptoAdapter()
+        adapter = CryptoAdapter { crypto ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("crypto", crypto)
+            startActivity(intent)
+        }
+
         val recyclerView = findViewById<RecyclerView>(R.id.idCurrencies)
-        progressBar = findViewById(R.id.idLoading)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        progressBar = findViewById(R.id.idLoading)
 
         val searchEditText = findViewById<EditText>(R.id.idSearch)
         searchEditText.addTextChangedListener(object : TextWatcher {

@@ -1,5 +1,9 @@
 package com.dilvan.cryptoswitch.endpoint
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
+
+@Parcelize
 data class Crypto(
     val symbol: String,
     val baseAsset: String,
@@ -12,4 +16,4 @@ data class Crypto(
     val bidPrice: String,
     val askPrice: String,
     val at: Long
-)
+) : Parcelable
