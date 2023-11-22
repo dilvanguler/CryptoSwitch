@@ -11,6 +11,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/idSearch"
     android:layout_margin="4dp"
+    android:layout_marginBottom="5dp"
     android:textColor="@color/black"
     android:hint="Search for Crypto Currencies here..."/>
 
