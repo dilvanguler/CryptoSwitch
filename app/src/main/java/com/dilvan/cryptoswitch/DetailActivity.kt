@@ -2,6 +2,7 @@ package com.dilvan.cryptoswitch
 
 import ExchangeRateResponse
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.dilvan.cryptoswitch.endpoint.ApiClient
@@ -18,41 +19,45 @@ class DetailActivity : AppCompatActivity() {
         // Retrieve the data from the intent
         val crypto = intent.getParcelableExtra<Crypto>("crypto")
 
-        val cryptoName = crypto?.symbol // replace "symbol" with your actual property
-        val exchangeRate = crypto?.lastPrice // replace "lastPrice" with your actual property
+        val cryptoName = crypto?.baseAsset // replace "symbol" with your actual property
+        val price = crypto?.openPrice // replace "lastPrice" with your actual property
 
-        val nameTextView = findViewById<TextView>(R.id.tvdBaseAsset) // replace with your actual TextView ID
+        val quoteAsset = crypto?.quoteAsset
+
+        val nameTextView =
+            findViewById<TextView>(R.id.tvdBaseAsset) // replace with your actual TextView ID
         nameTextView.text = cryptoName
+
+        val priceTextView = findViewById<TextView>(R.id.tvdPrice)
+        priceTextView.text = "Price: $price"
+
+        val quoteAssetTextView = findViewById<TextView>(R.id.tvdQuoteAsset)
+        quoteAssetTextView.text = "Currency:  $quoteAsset"
 
         // Fetching the exchange rates
         fetchExchangeRates()
     }
 
     private fun fetchExchangeRates() {
-        val currencies = listOf("USD", "SEK", "INR")
-        val textViews = listOf(R.id.usd, R.id.sek, R.id.inr)
+        val call = ApiClient.exchangeService.getExchangeRate(
+            "8dd7e35a97d46e859c9ec6e5195b4fa3", "EUR", "USD,SEK,INR")
+        call.enqueue(object : Callback<ExchangeRateResponse> {
+            override fun onResponse(call: Call<ExchangeRateResponse>, response: Response<ExchangeRateResponse>) {
+                if (response.isSuccessful) {
+                    val rates = response.body()?.rates
+                    // Log the rates or update your UI here
+                    findViewById<TextView>(R.id.usd).text = "USD: ${rates?.USD}"
+                    findViewById<TextView>(R.id.sek).text = "SEK: ${rates?.SEK}"
+                    findViewById<TextView>(R.id.inr).text = "INR: ${rates?.INR}"
+                } else {
+                    val errorMessage = response.errorBody()?.string()
+                    Log.e("DetailActivity", "Failed to fetch exchange rates: $errorMessage")
+                }
+            }
 
-        // Network request to fetch the exchange rates listed in currencies
-        for (i in currencies.indices) {
-            val call = ApiClient.exchangeService.getExchangeRate(currencies[i])
-            call.enqueue(object : Callback<ExchangeRateResponse> {
-                override fun onResponse(call: Call<ExchangeRateResponse>, response: Response<ExchangeRateResponse>) {
-                    if (response.isSuccessful) {
-                        val rates = response.body()?.rates
-                        val rate = when (currencies[i]) {
-                            "USD" -> rates?.USD
-                            "SEK" -> rates?.SEK
-                            "INR" -> rates?.INR
-                            else -> null
-                        }
-                        val textView = findViewById<TextView>(textViews[i])
-                        textView.text = rate.toString()
-                    }
-                }
-                override fun onFailure(call: Call<ExchangeRateResponse>, t: Throwable) {
-                    // Handle the error
-                }
-            })
-        }
+            override fun onFailure(call: Call<ExchangeRateResponse>, t: Throwable) {
+                Log.e("DetailActivity", "Network request failed", t)
+            }
+        })
     }
 }

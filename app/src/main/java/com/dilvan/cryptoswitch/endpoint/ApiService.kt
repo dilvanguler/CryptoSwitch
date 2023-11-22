@@ -11,6 +11,10 @@ interface CryptoService {
 }
 
 interface ExchangeService {
-    @GET("v1/latest?access_key=8dd7e35a97d46e859c9ec6e5195b4fa3")
-    fun getExchangeRate(@Query("base") base: String): Call<ExchangeRateResponse>
+    @GET("v1/latest")
+    fun getExchangeRate(
+        @Query("access_key") accessKey: String,
+        @Query("base") base: String,
+        @Query("symbols") symbols: String
+    ): Call<ExchangeRateResponse>
 }

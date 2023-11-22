@@ -27,21 +27,37 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvdPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tvdQuoteAsset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
+    <TextView
         android:id="@+id/sek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/usd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/inr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:textSize="20sp" />
+
+
 
 </LinearLayout>
