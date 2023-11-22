@@ -2,20 +2,20 @@ package com.dilvan.cryptoswitch.endpoint
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-object RetrofitClient {
-    private const val BASE_URL = "https://api.wazirx.com/sapi/v1/tickers/24hr"
-
-    val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-}
-
 object ApiClient {
-    val apiService: ApiService by lazy {
-        RetrofitClient.retrofit.create(ApiService::class.java)
-    }
+    private const val CRYPTO_BASE_URL = "https://api.wazirx.com/"
+    private const val EXCHANGE_BASE_URL = "http://api.exchangeratesapi.io/"
+
+    private val cryptoRetrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(CRYPTO_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val exchangeRetrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(EXCHANGE_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val cryptoService: CryptoService = cryptoRetrofit.create(CryptoService::class.java)
+    val exchangeService: ExchangeService = exchangeRetrofit.create(ExchangeService::class.java)
 }
