@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,13 @@ class DetailActivity : AppCompatActivity() {
 
         // Retrieve the data from the intent
         val crypto = intent.getParcelableExtra<Crypto>("crypto")
+
+        // Button to next activity
+        val button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            val intent = Intent(this, ExchangeRateActivity::class.java)
+            startActivity(intent)
+        }
 
         val cryptoName = crypto?.baseAsset
         val price = crypto?.openPrice
@@ -73,6 +81,8 @@ private fun fetchExchangeRates(
         "USDT" to 0.92,
         "WRX" to 0.11)
 
+
+
     val call = ApiClient.exchangeService.getExchangeRate(
         "8dd7e35a97d46e859c9ec6e5195b4fa3", "EUR", "USD,SEK,INR")
     call.enqueue(object : Callback<ExchangeRateResponse> {
@@ -81,14 +91,15 @@ private fun fetchExchangeRates(
             response: Response<ExchangeRateResponse>)
         {
             if (response.isSuccessful) {
-                val ratesResponse = response.body()?.rates
+                val exchangeRateResponse = response.body()
                 rates.clear()
-                ratesResponse?.let {
-                    rates["USD"] = it.USD
-                    rates["SEK"] = it.SEK
-                    rates["INR"] = it.INR
+                exchangeRateResponse?.let {
+                    rates["USD"] = it.rates["USD"] ?: 0.0
+                    rates["SEK"] = it.rates["SEK"] ?: 0.0
+                    rates["INR"] = it.rates["INR"] ?: 0.0
                 }
                 rates.putAll(hardcodedRates)
+
 
 
 

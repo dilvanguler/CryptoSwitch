@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="Detailed View"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="48dp"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        tools:layout_editor_absoluteY="48dp" />
 
     <TextView
         android:id="@+id/tvdBaseAsset"
@@ -30,13 +30,13 @@
         android:id="@+id/tvdPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvdQuoteAsset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/sek"
@@ -52,5 +52,12 @@
         android:backgroundTint="#EDE9E9"
         android:foregroundTint="#EDE9E9"
         android:scrollbarThumbVertical="@android:drawable/arrow_down_float" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_marginTop="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CURRENCY EXCHANGE RATES" />
 
 </LinearLayout>
