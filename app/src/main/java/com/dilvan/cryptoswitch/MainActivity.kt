@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         adapter = CryptoAdapter { crypto ->
             val intent = Intent(this, DetailActivity::class.java)
             intent.putExtra("crypto", crypto)
@@ -45,7 +46,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable) {
                 val searchText = s.toString()
-                val filteredCryptocurrencies = cryptocurrencies.filter { it.symbol.contains(searchText, ignoreCase = true) }
+                val filteredCryptocurrencies =
+                    cryptocurrencies.filter { it.symbol.contains(searchText, ignoreCase = true) }
                 adapter.setData(filteredCryptocurrencies)
             }
         })

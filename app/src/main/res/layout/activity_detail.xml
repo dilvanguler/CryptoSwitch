@@ -14,15 +14,23 @@
         android:text="Detailed View"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="48dp" />
+        tools:layout_editor_absoluteY="48dp"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/tvdBaseAsset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/sek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/usd"
