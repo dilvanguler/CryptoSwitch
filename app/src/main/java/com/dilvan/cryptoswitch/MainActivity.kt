@@ -12,12 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dilvan.cryptoswitch.endpoint.ApiClient
 import com.dilvan.cryptoswitch.endpoint.Crypto
 import com.dilvan.cryptoswitch.endpoint.CryptoViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adapter: CryptoAdapter
@@ -53,6 +50,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.cryptoData.observe(this, Observer { cryptoList ->
             // Update your RecyclerView with the new data
             adapter.setData(cryptoList)
+
+            // Update your list of cryptocurrencies
+            cryptocurrencies = cryptoList
         })
 
         viewModel.isLoading.observe(this, Observer { isLoading ->

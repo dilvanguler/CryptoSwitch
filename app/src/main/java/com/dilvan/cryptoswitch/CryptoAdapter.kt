@@ -30,10 +30,12 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoViewHolder>() {
 
     class CryptoViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(crypto: Crypto) {
-            view.findViewById<TextView>(R.id.tvSymbol).text = crypto.symbol
             view.findViewById<TextView>(R.id.tvBaseAsset).text = crypto.baseAsset
+            view.findViewById<TextView>(R.id.tvSymbol).text = crypto.symbol
             view.findViewById<TextView>(R.id.tvQuoteAsset).text = crypto.quoteAsset
             view.findViewById<TextView>(R.id.tvLastPrice).text = crypto.lastPrice
+            view.findViewById<TextView>(R.id.tvVolume).text = crypto.volume
+
         }
     }
 }
