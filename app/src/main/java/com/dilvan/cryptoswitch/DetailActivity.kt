@@ -8,31 +8,41 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.dilvan.cryptoswitch.endpoint.ApiClient
 import com.dilvan.cryptoswitch.data.Crypto
+import com.dilvan.cryptoswitch.viewmodel.CryptoViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DetailActivity : AppCompatActivity() {
+    private lateinit var viewModel: CryptoViewModel
     private val rates = mutableMapOf<String, Double>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        // Initialize the spinner and currencies here
-        val spinner = findViewById<Spinner>(R.id.spinner)
-        val currencies = arrayOf("USD", "SEK", "INR", "BTC", "USDT", "WRX")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, currencies)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        viewModel = ViewModelProvider(this).get(CryptoViewModel::class.java)
 
         // Retrieve the data from the intent
         val crypto = intent.getParcelableExtra<Crypto>("crypto")
+        val cryptoName = crypto?.baseAsset
+        val nameTextView = findViewById<TextView>(R.id.tvdBaseAsset)
+        if (cryptoName != null) {
+            nameTextView.text = cryptoName.toUpperCase()
+        }
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        val priceTextView = findViewById<TextView>(R.id.tvdPrice)
+        val currencies = arrayOf("USD", "SEK", "INR")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, currencies)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
 
         // Button to next activity
         val button = findViewById<Button>(R.id.button)
@@ -41,29 +51,27 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val cryptoName = crypto?.baseAsset
-        val price = crypto?.openPrice
-
-        val quoteAsset = crypto?.quoteAsset
-
-        val nameTextView = findViewById<TextView>(R.id.tvdBaseAsset)
-        if (cryptoName != null) {
-            nameTextView.text = cryptoName.toUpperCase()
+        viewModel.exchangeRates.observe(this) { rates ->
+            val selectedCurrency = spinner.selectedItem.toString()
+            val rate = rates[selectedCurrency]
+            if (rate != null) {
+                val priceInUSD = rate * 1 // Replace 1 with the price in the selected currency
+                priceTextView.text = "Price in $selectedCurrency: $priceInUSD"
+            }
         }
 
-        val priceTextView = findViewById<TextView>(R.id.tvdPrice)
-        priceTextView.text = "Price: $price"
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedCurrency = parent.getItemAtPosition(position).toString()
+                viewModel.fetchExchangeRates(selectedCurrency)
+            }
 
-        val quoteAssetTextView = findViewById<TextView>(R.id.tvdQuoteAsset)
-        if (quoteAsset != null) {
-            quoteAssetTextView.text = "Currency:  ${quoteAsset.toUpperCase()}"
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
         }
-
-        // Fetching the exchange rates
-        fetchExchangeRates(spinner, currencies, priceTextView, intent, rates)
     }
-    }
-
+}
 private fun fetchExchangeRates(
     spinner: Spinner,
     currencies: Array<String>,
@@ -74,14 +82,6 @@ private fun fetchExchangeRates(
 {
     val crypto = intent.getParcelableExtra<Crypto>("crypto")
     val baseCurrency = crypto?.quoteAsset?.toUpperCase() ?: "EUR" // Default to EUR if quoteAsset is null
-
-    // Hardcoded exchange rates as chosen API does not provide these, in a time-crunch. TODO(dilvan):
-    val hardcodedRates = mapOf(
-        "BTC" to 33497.60,
-        "USDT" to 0.92,
-        "WRX" to 0.11)
-
-
 
     val call = ApiClient.exchangeService.getExchangeRate(
         "8dd7e35a97d46e859c9ec6e5195b4fa3", "EUR", "USD,SEK,INR")
@@ -98,10 +98,6 @@ private fun fetchExchangeRates(
                     rates["SEK"] = it.rates["SEK"] ?: 0.0
                     rates["INR"] = it.rates["INR"] ?: 0.0
                 }
-                rates.putAll(hardcodedRates)
-
-
-
 
                 // Set up the onItemSelectedListener here
                 spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
